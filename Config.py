@@ -6,7 +6,14 @@ from models.alexnet_imagenet import alexnet
 from models.vgg_imagenet import vgg16
 from models.resnet_imagenet import resnet18
 
+def create_dir(dirname):
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+
 basedir, _ = os.path.split(os.path.abspath(__file__))
+
+print("BASE DIR: {}".format(basedir))
+
 basedir = os.path.join(basedir, 'data')
 
 MODELS = {'alexnet_cifar100': alexnet_cifar100,
@@ -22,8 +29,10 @@ BATCH_SIZE = 128
 # ------------------------------------------------
 CHECKPOINT_DIR = os.path.join(basedir, 'checkpoint')
 RESULTS_DIR = os.path.join(basedir, 'results')
-DATASET_DIR = os.path.join(basedir, 'datasets')
-DATASET_DIR_IMAGENET = '/mnt/ilsvrc2012'
+## cifar 100 dataset dir
+#  DATASET_DIR = os.path.join(basedir, 'datasets')
+DATASET_DIR = '/project/zero_prediction/'
+DATASET_DIR_IMAGENET = '/project/zero_prediction/ImageNet'
 
 
 # ------------------------------------------------
