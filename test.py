@@ -10,8 +10,10 @@ class test(nn.Module):
         super(test, self).__init__()
 
         self.planes = planes
-        self.weight1 = torch.ones(1,1,3,3)
-        self.weight2 = torch.randn(1,1,3,3)
+        self.weight1 = torch.randn((1,1,3,3), requires_grad = True).to("cuda")
+        self.weight2 = torch.randn((1,1,3,3), requires_grad = True).to("cuda")
+        print(self.weight1)
+        print(self.weight2)
         self.bn1 = nn.BatchNorm2d(planes)
         self.bn2 = nn.BatchNorm2d(planes)
 
@@ -39,12 +41,16 @@ class test(nn.Module):
 
 
 if __name__ == "__main__":
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-    input1 = torch.ones(1,5,10,10)
+    input1 = torch.ones(1,5,10,10).to(device)
+    print(input1)
     #  print(input1)
     planes = input1.shape[1]
     #  print(input1[:,0,:,:])
     model = test(planes)
+    model = model.to(device)
+    torchsummary.summary(model, (5,10,10))
     output = model(input1)
     print("Total Output ")
     print(output)
