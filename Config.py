@@ -6,6 +6,20 @@ from models.alexnet_imagenet import alexnet
 from models.vgg_imagenet import vgg16
 from models.resnet_imagenet import resnet18
 
+# -----------------------------------------------
+#                  filter mode
+# -----------------------------------------------
+"""
+Filter mode for zap 
+:0 --> original zap model N*K*K filters : full Depthwise Conv 
+:1 --> extreme model K*K filters
+:2 --> 2*K*K
+:4 --> 4*K*K
+:8 --> 8*K*K
+"""
+filter_mode = 0
+
+
 def create_dir(dirname):
     if not os.path.exists(dirname):
         os.makedirs(dirname)
@@ -14,7 +28,7 @@ basedir, _ = os.path.split(os.path.abspath(__file__))
 
 print("BASE DIR: {}".format(basedir))
 
-basedir = os.path.join(basedir, 'mem_load1')
+basedir = os.path.join(basedir, 'filter_mode-{}'.format(filter_mode))
 
 MODELS = {'alexnet_cifar100': alexnet_cifar100,
           'alexnet_imagenet': alexnet,
@@ -110,18 +124,6 @@ STATS_MASK_VAL_HIST = 2
 STATS_ERR_TO_TH = 3
 STATS_ROC = 4
 
-# -----------------------------------------------
-#                  filter mode
-# -----------------------------------------------
-"""
-Filter mode for zap 
-:0 --> original zap model N*K*K filters : Depthwise Conv 
-:1 --> extreme model K*K filters
-:2 --> 2*K*K
-:4 --> 4*K*K
-:8 --> 8*K*K 
-"""
-filter_mode = 1
 
 # ------------------------------------------------
 #                  Util Functions

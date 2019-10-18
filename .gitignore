@@ -3,3 +3,9 @@
 .idea/
 src/data/
 
+__pycache__
+
+
+*.log
+log/
+filter_mode*/
