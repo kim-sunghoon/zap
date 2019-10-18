@@ -6,15 +6,22 @@ from models.alexnet_imagenet import alexnet
 from models.vgg_imagenet import vgg16
 from models.resnet_imagenet import resnet18
 
+def create_dir(dirname):
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+
 basedir, _ = os.path.split(os.path.abspath(__file__))
-basedir = os.path.join(basedir, 'data')
+
+print("BASE DIR: {}".format(basedir))
+
+basedir = os.path.join(basedir, 'mem_load1')
 
 MODELS = {'alexnet_cifar100': alexnet_cifar100,
           'alexnet_imagenet': alexnet,
           'vgg16_imagenet': vgg16,
           'resnet18_imagenet': resnet18}
 
-BATCH_SIZE = 128
+BATCH_SIZE = 256
 
 
 # ------------------------------------------------
@@ -22,8 +29,9 @@ BATCH_SIZE = 128
 # ------------------------------------------------
 CHECKPOINT_DIR = os.path.join(basedir, 'checkpoint')
 RESULTS_DIR = os.path.join(basedir, 'results')
-DATASET_DIR = os.path.join(basedir, 'datasets')
-DATASET_DIR_IMAGENET = '/mnt/ilsvrc2012'
+#  DATASET_DIR = os.path.join(basedir, 'datasets')
+DATASET_DIR = '/project/zero_prediction/'
+DATASET_DIR_IMAGENET = '/project/zero_prediction/ImageNet'
 
 
 # ------------------------------------------------
@@ -102,6 +110,19 @@ STATS_MASK_VAL_HIST = 2
 STATS_ERR_TO_TH = 3
 STATS_ROC = 4
 
+# -----------------------------------------------
+#                  filter mode
+# -----------------------------------------------
+"""
+Filter mode for zap 
+:0 --> original zap model N*K*K filters : Depthwise Conv 
+:1 --> extreme model K*K filters
+:2 --> 2*K*K
+:4 --> 4*K*K
+:8 --> 8*K*K 
+"""
+filter_mode = 1
+
 # ------------------------------------------------
 #                  Util Functions
 # ------------------------------------------------
@@ -121,7 +142,7 @@ def get_chkps_path(arch, dataset):
 def get_model_chkp(arch, dataset):
     if arch == 'alexnet' and dataset == 'cifar100':
         filename = '_alexnet_cifar100_epoch-89_top1-64.38.pth'
-        return '{}/{}'.format(RESULTS_DIR, filename)
+        return '{}/{}'.format('data/results', filename)
     # For ImageNet PyTorch pretrained models are used
     elif dataset == 'imagenet':
         return None
