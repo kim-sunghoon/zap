@@ -3,6 +3,7 @@ import argparse
 import util.checkpoint as checkpoint
 import Config as cfg
 import os
+import sys
 import numpy as np
 from NeuralNet import NeuralNet
 
@@ -41,7 +42,7 @@ parser.add_argument('--max_samples', default=None, type=int,
                     help='maximum samples from training set (default: max available)')
 parser.add_argument('--no_retrain', action='store_true',
                     help='skip retraining, relevant only for EVAL_MODEL phase (default: False)')
-parser.add_argument('--gpu', nargs='+', default=None,
+parser.add_argument('--gpu', type=str, default="3",
                     help='GPU to run on (default: 0)')
 
 
@@ -63,10 +64,17 @@ def train_pred_layers(train_gen, test_gen, arch, dataset, model_chkp=None, mask_
         mask_list = [6, 5, 4, 3]
 
     for mask in mask_list:
-        cfg.LOG.start_new_log(name='{}-{}_zap-train_mask-{}'.format(arch, dataset, mask))
+        cfg.LOG.start_new_log(name='{}-{}_zap-train_mask-{}_filtermode-{}'.format(arch, dataset, mask, cfg.filter_mode))
 
         mask = int(mask)
         nn = NeuralNet(arch, dataset, model_chkp=model_chkp)
+        import torchsummary
+        print(nn.model)
+        if dataset == 'cifar100':
+            torchsummary.summary(nn.model, (3, 32, 32))
+        else:
+            torchsummary.summary(nn.model, (3, 224, 224))
+        #  sys.exit(1)
 
         for pred_idx, pred_layer in enumerate(nn.model.pred_layers):
             if pred_list is not None:
@@ -115,7 +123,7 @@ def eval_model(train_gen, test_gen, arch, dataset, pred_chkps_dict, model_chkp=N
         pred_chkps = checkpoint.get_chkp_files([chkp])
 
         for threshold in th_list:
-            cfg.LOG.start_new_log(name='{}-{}_full-model_mask-{}_th-{}'.format(arch, dataset, mask, threshold))
+            cfg.LOG.start_new_log(name='{}-{}_full-model_mask-{}_th-{}_filtermode-{}'.format(arch, dataset, mask, threshold, cfg.filter_mode))
             cfg.LOG.write_title("Mask={}".format(mask), pad_width=40, pad_symbol='=')
 
             nn = NeuralNet(arch, dataset, model_chkp=model_chkp)
@@ -173,7 +181,7 @@ def eval_pred_layers(test_gen, arch, dataset, pred_chkps_db, model_chkp=None, ma
         mask = int(mask)
         pred_chkps = checkpoint.get_chkp_files([chkp])
 
-        cfg.LOG.start_new_log(name='{}-{}_zap-analysis_mask-{}'.format(arch, dataset, mask))
+        cfg.LOG.start_new_log(name='{}-{}_zap-analysis_mask-{}_filtermode-{}'.format(arch, dataset, mask, cfg.filter_mode))
         cfg.LOG.write_title("Mask={}".format(mask), pad_width=40, pad_symbol='=')
 
         nn = NeuralNet(arch, dataset, model_chkp=model_chkp)
@@ -217,7 +225,7 @@ def eval_roc(train_gen, test_gen, arch, dataset, pred_chkps_dict, model_chkp=Non
         mask = int(mask)
         pred_chkps = checkpoint.get_chkp_files([chkp])
 
-        cfg.LOG.start_new_log(name='{}-{}_zap-analysis-roc_mask-{}'.format(arch, dataset, mask))
+        cfg.LOG.start_new_log(name='{}-{}_zap-analysis-roc_mask-{}_filtermode-{}'.format(arch, dataset, mask, cfg.filter_mode))
         cfg.LOG.write_title("Mask={}".format(mask), pad_width=40, pad_symbol='=')
 
         nn = NeuralNet(arch, dataset, model_chkp=model_chkp)
@@ -258,7 +266,7 @@ def main():
     args = parser.parse_args()
 
     if args.gpu is not None:
-        os.environ['CUDA_VISIBLE_DEVICES'] = ','.join(args.gpu)
+        os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
     cfg.BATCH_SIZE = args.batch_size
 

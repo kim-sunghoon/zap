@@ -67,5 +67,5 @@ class Logger:
         else:
             self.path = path
 
-        os.mkdir('{}'.format(self.path))
+        os.makedirs('{}'.format(self.path))
         self.write("New results directory created @ {}".format(self.path), log_file=False)
