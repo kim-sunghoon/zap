@@ -112,8 +112,8 @@ class NeuralNet:
         self.optimizer = torch.optim.SGD(self.model.parameters(), lr=lr, momentum=momentum, weight_decay=wd)
         self.lr_plan = lr_plan
 
-        cfg.LOG.write('train_pred: epochs={}, lr={}, lr_plan={}, momentum={}, wd={}, batch_size={}, optimizer={}'
-                      .format(epochs, lr, lr_plan, momentum, wd, cfg.BATCH_SIZE, 'SGD'))
+        cfg.LOG.write('train_pred: epochs={}, lr={}, lr_plan={}, momentum={}, wd={}, batch_size={}, optimizer={}, filter_mode = {}'
+                      .format(epochs, lr, lr_plan, momentum, wd, cfg.BATCH_SIZE, 'SGD', cfg.filter_mode))
 
         for epoch in range(self.next_train_epoch, epochs):
             self._adjust_lr_rate(self.optimizer, epoch, lr_plan)
@@ -128,8 +128,8 @@ class NeuralNet:
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr, weight_decay=0)
         self.lr_plan = lr_plan
 
-        cfg.LOG.write('train_pred: epochs={}, pred_idx={}, lr={}, lr_plan={}, batch_size={}, optimizer={}'
-                      .format(epochs, pred_idx, lr, lr_plan, cfg.BATCH_SIZE, 'Adam'))
+        cfg.LOG.write('train_pred: epochs={}, pred_idx={}, lr={}, lr_plan={}, batch_size={}, optimizer={}, filter_mode={}'
+                      .format(epochs, pred_idx, lr, lr_plan, cfg.BATCH_SIZE, 'Adam', cfg.filter_mode))
 
         for epoch in range(epochs):
             self._adjust_lr_rate(self.optimizer, epoch, lr_plan)
@@ -140,8 +140,8 @@ class NeuralNet:
             total_activations = pred_layer.stats['X_o>0'] + pred_layer.stats['X_o<=0']
             total_saved = pred_layer.stats['M==0'] / total_activations
 
-            filename = 'idx-{}_mask-{}_th-{}_saved-{}.pth'\
-                .format(pred_idx, pred_layer.mask_type, pred_layer.threshold, round(100*total_saved, 2))
+            filename = 'idx-{}_mask-{}_th-{}_saved-{}_filtermode={}.pth'\
+                .format(pred_idx, pred_layer.mask_type, pred_layer.threshold, round(100*total_saved, 2), cfg.filter_mode)
             pred_layer.save_state('{}/{}'.format(cfg.LOG.path, filename))
             cfg.LOG.write('', date=False)
             cfg.LOG.write('ZAP checkpoint saved to {}/{}'.format(cfg.LOG.path, filename))
