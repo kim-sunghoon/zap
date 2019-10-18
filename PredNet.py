@@ -14,10 +14,24 @@ class ZAP(nn.Module):
         self._disabled = False
         self._train = True
         self._stats = []
+        self.planes = planes
+        """
+        Original DW convolution, filters == 3 x 3 x planes, bias = planes --> parmas == 10 x planes
+        customized convolution kernels --> mode 1, 2, 4, 8
+        """
+        print(cfg.filter_mode)
+        if cfg.filter_mode == 0:
+            self.conv1 = nn.Conv2d(planes, planes, kernel_size=3, padding=1, stride=1, groups=planes)
+            self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, padding=1, stride=1, groups=planes)
 
-        self.conv1 = nn.Conv2d(planes, planes, kernel_size=3, padding=1, stride=1, groups=planes)
+        elif cfg.filter_mode in [1,2,4,8]:
+            self.conv1 = nn.Conv2d(cfg.filter_mode, cfg.filter_mode, kernel_size=3, padding=1, stride=1, groups=cfg.filter_mode)
+            self.conv2 = nn.Conv2d(cfg.filter_mode, cfg.filter_mode, kernel_size=3, padding=1, stride=1, groups=cfg.filter_mode)
+        else:
+            raise NotImplementedError
+
+
         self.bn1 = nn.BatchNorm2d(planes)
-        self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, padding=1, stride=1, groups=planes)
         self.bn2 = nn.BatchNorm2d(planes)
 
         self.mask_type = mask_type
@@ -46,12 +60,46 @@ class ZAP(nn.Module):
         # Masked input, i.e., "calculated" only partial ofm elements
         x_pred_mask = torch.mul(x, pre_mask)
 
-        x_pred_mask = self.conv1(x_pred_mask)
-        x_pred_mask = self.bn1(x_pred_mask)
-        x_pred_mask = F.relu(x_pred_mask)
+        """
+        ZAP's Original DW Convolution 
+        """
+        if cfg.filter_mode == 0:
+            x_pred_mask = self.conv1(x_pred_mask)
+            x_pred_mask = self.bn1(x_pred_mask)
+            x_pred_mask = F.relu(x_pred_mask)
 
-        x_pred_mask = self.conv2(x_pred_mask)
-        x_pred_mask = self.bn2(x_pred_mask)
+            x_pred_mask = self.conv2(x_pred_mask)
+            x_pred_mask = self.bn2(x_pred_mask)
+
+        """
+        custimized convolution kernel 
+        """
+        elif cfg.filter_mode in [1,2,4,8]:
+            out1 = None
+            out2 = None
+            for i in range(0, self.planes, cfg.filter_mode):
+                if i == 0:
+                    out1 = self.conv1(x_pred_mask[:, i:i+cfg.filter_mode,:,:])
+                else:
+                    temp_out1 = self.conv1(x_pred_mask[:,i:i+cfg.filter_mode,:,:])
+                    out1 = torch.cat(([out1, temp_out1]), dim=1)
+
+            out1 = self.bn1(out1)
+            out1 = F.relu(out1)
+
+            for i in range(0, self.planes, cfg.filter_mode):
+                if i == 0:
+                    out2 = self.conv2(out1[:, i:i+cfg.filter_mode,:,:])
+                else:
+                    temp_out2 = self.conv2(out1[:,i:i+cfg.filter_mode,:,:])
+                    out2 = torch.cat(([out, temp_out2]), dim=1)
+            x_pred_mask = self.bn2(out2)
+
+        else:
+            raise NotImplementedError
+
+        ### Done custimized
+
 
         x_pred_mask = torch.mul(x_pred_mask, pre_mask_c)
 

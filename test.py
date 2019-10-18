@@ -14,12 +14,11 @@ class test(nn.Module):
         if cfg.filter_mode == 0:
             self.conv1 = nn.Conv2d(planes, planes, kernel_size=3, padding=1, stride=1, groups=planes)
             self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, padding=1, stride=1, groups=planes)
-        elif cfg.filter_mode not in [1,2,4,8]:
-            raise NotImplementedError
-        else:
+        elif cfg.filter_mode in [1,2,4,8]:
             self.conv1 = nn.Conv2d(cfg.filter_mode, cfg.filter_mode, kernel_size=3, padding=1, stride=1, groups=cfg.filter_mode)
             self.conv2 = nn.Conv2d(cfg.filter_mode, cfg.filter_mode, kernel_size=3, padding=1, stride=1, groups=cfg.filter_mode)
-
+        else:
+            raise NotImplementedError
 
 
         self.bn1 = nn.BatchNorm2d(planes)
@@ -37,38 +36,29 @@ class test(nn.Module):
             out = self.bn2(out)
             return out
 
-
-        #  elif cfg.filter_mode == 1:
-        #      for i in range(0, self.planes, cfg.filter_mode):
-        #          if i == 0:
-        #              out = F.conv2d(x[:, i:i+cfg.filter_mode,:,:], self.weight1, stride=1, padding=1, groups=cfg.filter_mode)
-        #          else:
-        #              temp_out = F.conv2d(x[:,i:i+cfg.filter_mode,:,:], self.weight1, stride=1, padding=1, groups=cfg.filter_mode)
-        #              out = torch.cat(([out, temp_out]), dim=1)
-
-            #  out = self.bn1(out)
-            #
-            #  for i in range(0, self.planes, cfg.filter_mode):
-            #      if i == 0:
-            #          out = F.conv2d(x[:,i:i+cfg.filter_mode,:,:].unsqueeze(1), self.weight2, stride=1, padding=1)
-            #      else:
-            #          temp_out = F.conv2d(x[:,i:i+cfg.filter_mode,:,:].unsqueeze(1), self.weight2, stride=1, padding=1)
-            #          out = torch.cat(([out, temp_out]), dim=1)
-            #  out = self.bn2(out)
-
-            return out
-
-        elif cfg.filter_mode not in [1,2,4,8]:
-            raise NotImplementedError
-        else:
+        elif cfg.filter_mode in [1,2,4,8]:
+            out1 = None
+            out2 = None
             for i in range(0, self.planes, cfg.filter_mode):
                 if i == 0:
-                    out = self.conv1(x[:, i:i+cfg.filter_mode,:,:])
+                    out1 = self.conv1(x[:, i:i+cfg.filter_mode,:,:])
                 else:
-                    temp_out = self.conv1(x[:,i:i+cfg.filter_mode,:,:])
-                    out = torch.cat(([out, temp_out]), dim=1)
+                    temp_out1 = self.conv1(x[:,i:i+cfg.filter_mode,:,:])
+                    out1 = torch.cat(([out1, temp_out1]), dim=1)
+            out1 = self.bn1(out1)
+            out1 = F.relu(out1)
 
-            return out
+            for i in range(0, self.planes, cfg.filter_mode):
+                if i == 0:
+                    out2 = self.conv1(out1[:, i:i+cfg.filter_mode,:,:])
+                else:
+                    temp_out2 = self.conv1(out1[:,i:i+cfg.filter_mode,:,:])
+                    out2 = torch.cat(([out2, temp_out2]), dim=1)
+            out2 = self.bn2(out2)
+
+            return out2
+        else:
+            raise NotImplementedError
 
 
 
