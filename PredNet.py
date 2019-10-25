@@ -19,16 +19,14 @@ class ZAP(nn.Module):
         Original DW convolution, filters == 3 x 3 x planes, bias = planes --> parmas == 10 x planes
         customized convolution kernels --> mode 1, 2, 4, 8
         """
-        print(cfg.filter_mode)
         if cfg.filter_mode == 0:
             self.conv1 = nn.Conv2d(planes, planes, kernel_size=3, padding=1, stride=1, groups=planes)
             self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, padding=1, stride=1, groups=planes)
-
-        elif cfg.filter_mode in [1,2,4,8]:
+        elif cfg.filter_mode not in [1,2,4,8]:
+            raise NotImplementedError
+        else:
             self.conv1 = nn.Conv2d(cfg.filter_mode, cfg.filter_mode, kernel_size=3, padding=1, stride=1, groups=cfg.filter_mode)
             self.conv2 = nn.Conv2d(cfg.filter_mode, cfg.filter_mode, kernel_size=3, padding=1, stride=1, groups=cfg.filter_mode)
-        else:
-            raise NotImplementedError
 
 
         self.bn1 = nn.BatchNorm2d(planes)
@@ -61,7 +59,8 @@ class ZAP(nn.Module):
         x_pred_mask = torch.mul(x, pre_mask)
 
         """
-        ZAP's Original DW Convolution 
+        ZAP's Original DW Convolution && 
+        custimized convolution kernel
         """
         if cfg.filter_mode == 0:
             x_pred_mask = self.conv1(x_pred_mask)
@@ -71,10 +70,9 @@ class ZAP(nn.Module):
             x_pred_mask = self.conv2(x_pred_mask)
             x_pred_mask = self.bn2(x_pred_mask)
 
-        """
-        custimized convolution kernel 
-        """
-        elif cfg.filter_mode in [1,2,4,8]:
+        elif cfg.filter_mode not in [1,2,4,8]:
+            raise NotImplementedError
+        else:
             out1 = None
             out2 = None
             for i in range(0, self.planes, cfg.filter_mode):
@@ -92,11 +90,9 @@ class ZAP(nn.Module):
                     out2 = self.conv2(out1[:, i:i+cfg.filter_mode,:,:])
                 else:
                     temp_out2 = self.conv2(out1[:,i:i+cfg.filter_mode,:,:])
-                    out2 = torch.cat(([out, temp_out2]), dim=1)
+                    out2 = torch.cat(([out2, temp_out2]), dim=1)
             x_pred_mask = self.bn2(out2)
 
-        else:
-            raise NotImplementedError
 
         ### Done custimized
 

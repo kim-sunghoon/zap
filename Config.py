@@ -17,7 +17,8 @@ Filter mode for zap
 :4 --> 4*K*K
 :8 --> 8*K*K
 """
-filter_mode = 0
+filter_mode = 1
+print("filter mode: {}".format(filter_mode))
 
 
 def create_dir(dirname):
