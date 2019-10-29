@@ -29,7 +29,12 @@ basedir, _ = os.path.split(os.path.abspath(__file__))
 
 print("BASE DIR: {}".format(basedir))
 
-basedir = os.path.join(basedir, 'filter_mode-{}'.format(filter_mode))
+if filter_mode == 0:
+    basedir = os.path.join(basedir, 'data')
+else:
+    ## with filter modes
+    basedir = os.path.join(basedir, 'filter_mode-{}'.format(filter_mode))
+
 
 MODELS = {'alexnet_cifar100': alexnet_cifar100,
           'alexnet_imagenet': alexnet,

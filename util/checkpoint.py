@@ -18,12 +18,19 @@ def get_chkp_files(pred_folder):
         pred_idx = None
         saved_act = None
         mask = None
+        print("="*20)
+        print(filename_split)
 
         for param in filename_split:
+            print(param)
             if 'idx' in param:
                 pred_idx = int(param.split('-')[1])
             elif 'saved' in param:
-                saved_act = float(param[6:-4])
+                print(param[6:-4])
+                try:
+                    saved_act = float(param[6:-4])
+                except:
+                    saved_act = float(param[6:-3])
             elif 'mask' in param:
                 mask = int(param.split('-')[1])
 

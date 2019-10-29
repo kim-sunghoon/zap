@@ -140,8 +140,8 @@ class NeuralNet:
             total_activations = pred_layer.stats['X_o>0'] + pred_layer.stats['X_o<=0']
             total_saved = pred_layer.stats['M==0'] / total_activations
 
-            filename = 'idx-{}_mask-{}_th-{}_saved-{}_filtermode={}.pth'\
-                .format(pred_idx, pred_layer.mask_type, pred_layer.threshold, round(100*total_saved, 2), cfg.filter_mode)
+            filename = 'idx-{}_mask-{}_th-{}_saved-{}.pth'\
+                .format(pred_idx, pred_layer.mask_type, pred_layer.threshold, round(100*total_saved, 2))
             pred_layer.save_state('{}/{}'.format(cfg.LOG.path, filename))
             cfg.LOG.write('', date=False)
             cfg.LOG.write('ZAP checkpoint saved to {}/{}'.format(cfg.LOG.path, filename))

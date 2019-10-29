@@ -59,7 +59,7 @@ class ZAP(nn.Module):
         x_pred_mask = torch.mul(x, pre_mask)
 
         """
-        ZAP's Original DW Convolution && 
+        ZAP's Original DW Convolution &&
         custimized convolution kernel
         """
         if cfg.filter_mode == 0:
