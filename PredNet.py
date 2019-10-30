@@ -22,7 +22,12 @@ class ZAP(nn.Module):
         if cfg.filter_mode == 0:
             self.conv1 = nn.Conv2d(planes, planes, kernel_size=3, padding=1, stride=1, groups=planes)
             self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, padding=1, stride=1, groups=planes)
-        elif cfg.filter_mode not in [1,2,4,8]:
+
+        elif cfg.filter_mode == 1:
+            self.weight1 = torch.randn((1, cfg.filter_mode, 3,3), requires_grad = True).to("cuda")
+            self.weight2 = torch.randn((1, cfg.filter_mode, 3,3), requires_grad = True).to("cuda")
+
+        elif cfg.filter_mode not in [2,4,8]:
             raise NotImplementedError
         else:
             self.conv1 = nn.Conv2d(cfg.filter_mode, cfg.filter_mode, kernel_size=3, padding=1, stride=1, groups=cfg.filter_mode)
@@ -70,7 +75,30 @@ class ZAP(nn.Module):
             x_pred_mask = self.conv2(x_pred_mask)
             x_pred_mask = self.bn2(x_pred_mask)
 
-        elif cfg.filter_mode not in [1,2,4,8]:
+        elif cfg.filter_mode == 1:
+            out1 = None
+            out2 = None
+            for i in range(0, self.planes, cfg.filter_mode):
+                if i == 0:
+                    out1 = F.conv2d(x[:, i:i+cfg.filter_mode,:,:], self.weight1, stride=1, padding=1, groups=cfg.filter_mode)
+                else:
+                    temp_out = F.conv2d(x[:, i:i+cfg.filter_mode,:,:], self.weight1, stride=1, padding=1, groups=cfg.filter_mode)
+                    out1 = torch.cat(([out1, temp_out]), dim=1)
+
+            out1 = self.bn1(out1)
+            out1 = F.relu(out1)
+            #  print(out1.size)
+
+            for i in range(0, self.planes, cfg.filter_mode):
+                if i == 0:
+                    out2 = F.conv2d(out1[:, i:i+cfg.filter_mode,:,:], self.weight2, stride=1, padding=1, groups=cfg.filter_mode)
+                else:
+                    temp_out = F.conv2d(out1[:, i:i+cfg.filter_mode,:,:], self.weight2, stride=1, padding=1, groups=cfg.filter_mode)
+                    out2 = torch.cat(([out2, temp_out]), dim=1)
+
+            x_pred_mask = self.bn2(out2)
+
+        elif cfg.filter_mode not in [2,4,8]:
             raise NotImplementedError
         else:
             out1 = None

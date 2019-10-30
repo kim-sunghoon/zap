@@ -42,7 +42,7 @@ parser.add_argument('--max_samples', default=None, type=int,
                     help='maximum samples from training set (default: max available)')
 parser.add_argument('--no_retrain', action='store_true',
                     help='skip retraining, relevant only for EVAL_MODEL phase (default: False)')
-parser.add_argument('--gpu', type=str, default="3",
+parser.add_argument('--gpu', type=str, default="4",
                     help='GPU to run on (default: 0)')
 
 
