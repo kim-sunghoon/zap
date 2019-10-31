@@ -32,7 +32,7 @@ parser.add_argument('--mask_list', nargs='+', default=None,
                     help='masks to use')
 parser.add_argument('--epochs', default=5, type=int,
                     help='number of epochs for ZAP training or fine-tuning, phase-dependent (default: 5)')
-parser.add_argument('--batch_size', default=128, type=int,
+parser.add_argument('--batch_size', default=256, type=int,
                     help='batch size')
 parser.add_argument('--lr', default=0.0001, type=float,
                     help='learning rate (default: 0.0001)')
@@ -42,7 +42,7 @@ parser.add_argument('--max_samples', default=None, type=int,
                     help='maximum samples from training set (default: max available)')
 parser.add_argument('--no_retrain', action='store_true',
                     help='skip retraining, relevant only for EVAL_MODEL phase (default: False)')
-parser.add_argument('--gpu', type=str, default="4",
+parser.add_argument('--gpu', type=str, default="0",
                     help='GPU to run on (default: 0)')
 
 
@@ -64,7 +64,7 @@ def train_pred_layers(train_gen, test_gen, arch, dataset, model_chkp=None, mask_
         mask_list = [6, 5, 4, 3]
 
     for mask in mask_list:
-        cfg.LOG.start_new_log(name='{}-{}_zap-train_mask-{}_filtermode-{}'.format(arch, dataset, mask, cfg.filter_mode))
+        cfg.LOG.start_new_log(name='{}-{}_train_mask-{}'.format(arch, dataset, mask))
 
         mask = int(mask)
         nn = NeuralNet(arch, dataset, model_chkp=model_chkp)
@@ -123,7 +123,7 @@ def eval_model(train_gen, test_gen, arch, dataset, pred_chkps_dict, model_chkp=N
         pred_chkps = checkpoint.get_chkp_files([chkp])
 
         for threshold in th_list:
-            cfg.LOG.start_new_log(name='{}-{}_full-model_mask-{}_th-{}_filtermode-{}'.format(arch, dataset, mask, threshold, cfg.filter_mode))
+            cfg.LOG.start_new_log(name='{}-{}_full-model_mask-{}_th-{}'.format(arch, dataset, mask, threshold,))
             cfg.LOG.write_title("Mask={}".format(mask), pad_width=40, pad_symbol='=')
 
             nn = NeuralNet(arch, dataset, model_chkp=model_chkp)
@@ -181,7 +181,7 @@ def eval_pred_layers(test_gen, arch, dataset, pred_chkps_db, model_chkp=None, ma
         mask = int(mask)
         pred_chkps = checkpoint.get_chkp_files([chkp])
 
-        cfg.LOG.start_new_log(name='{}-{}_zap-analysis_mask-{}_filtermode-{}'.format(arch, dataset, mask, cfg.filter_mode))
+        cfg.LOG.start_new_log(name='{}-{}_zap-analysis_mask-{}'.format(arch, dataset, mask))
         cfg.LOG.write_title("Mask={}".format(mask), pad_width=40, pad_symbol='=')
 
         nn = NeuralNet(arch, dataset, model_chkp=model_chkp)
@@ -225,7 +225,7 @@ def eval_roc(train_gen, test_gen, arch, dataset, pred_chkps_dict, model_chkp=Non
         mask = int(mask)
         pred_chkps = checkpoint.get_chkp_files([chkp])
 
-        cfg.LOG.start_new_log(name='{}-{}_zap-analysis-roc_mask-{}_filtermode-{}'.format(arch, dataset, mask, cfg.filter_mode))
+        cfg.LOG.start_new_log(name='{}-{}_zap-analysis-roc_mask-{}'.format(arch, dataset, mask))
         cfg.LOG.write_title("Mask={}".format(mask), pad_width=40, pad_symbol='=')
 
         nn = NeuralNet(arch, dataset, model_chkp=model_chkp)

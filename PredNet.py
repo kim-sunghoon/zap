@@ -24,14 +24,44 @@ class ZAP(nn.Module):
             self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, padding=1, stride=1, groups=planes)
 
         elif cfg.filter_mode == 1:
-            self.weight1 = torch.randn((1, cfg.filter_mode, 3,3), requires_grad = True).to("cuda")
-            self.weight2 = torch.randn((1, cfg.filter_mode, 3,3), requires_grad = True).to("cuda")
+            self.weight1 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            nn.init.kaiming_normal_(self.weight1, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2, mode='fan_out', nonlinearity='relu')
 
-        elif cfg.filter_mode not in [2,4,8]:
+        elif cfg.filter_mode == 2:
+            self.weight1_1 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_2 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+
+            self.weight2_1 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_2 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            nn.init.kaiming_normal_(self.weight1_1, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_2, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_1, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_2, mode='fan_out', nonlinearity='relu')
+
+        elif cfg.filter_mode == 4:
+            self.weight1_1 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_2 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_3 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_4 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+
+            self.weight2_1 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_2 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_1 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_2 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+
+            nn.init.kaiming_normal_(self.weight1_1, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_2, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_3, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_4, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_1, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_2, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_3, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_4, mode='fan_out', nonlinearity='relu')
+
+        elif cfg.filter_mode not in [0,1,2,4,8]:
             raise NotImplementedError
-        else:
-            self.conv1 = nn.Conv2d(cfg.filter_mode, cfg.filter_mode, kernel_size=3, padding=1, stride=1, groups=cfg.filter_mode)
-            self.conv2 = nn.Conv2d(cfg.filter_mode, cfg.filter_mode, kernel_size=3, padding=1, stride=1, groups=cfg.filter_mode)
 
 
         self.bn1 = nn.BatchNorm2d(planes)
@@ -87,7 +117,7 @@ class ZAP(nn.Module):
 
             out1 = self.bn1(out1)
             out1 = F.relu(out1)
-            #  print(out1.size)
+            #  print(out1.size())
 
             for i in range(0, self.planes, cfg.filter_mode):
                 if i == 0:
@@ -98,28 +128,42 @@ class ZAP(nn.Module):
 
             x_pred_mask = self.bn2(out2)
 
-        elif cfg.filter_mode not in [2,4,8]:
-            raise NotImplementedError
-        else:
+        elif cfg.filter_mode == 2:
             out1 = None
             out2 = None
+            out1_1 = None
+            out1_2 = None
+            out2_1 = None
+            out2_2 = None
             for i in range(0, self.planes, cfg.filter_mode):
+                out1_1 = F.conv2d(x[:, i:i+1,:,:], self.weight1_1, stride=1, padding=1, groups=1)
+                out1_2 = F.conv2d(x[:, i+1:i+2,:,:], self.weight1_2, stride=1, padding=1, groups=1)
                 if i == 0:
-                    out1 = self.conv1(x_pred_mask[:, i:i+cfg.filter_mode,:,:])
+                    out1 = torch.cat([out1_1, out1_2], dim=1)
                 else:
-                    temp_out1 = self.conv1(x_pred_mask[:,i:i+cfg.filter_mode,:,:])
-                    out1 = torch.cat(([out1, temp_out1]), dim=1)
+                    out1 = torch.cat(([out1, out1_1, out1_2]), dim=1)
 
             out1 = self.bn1(out1)
             out1 = F.relu(out1)
+            print("out1 size: {}".format(out1.size()))
 
             for i in range(0, self.planes, cfg.filter_mode):
+                out2_1 = F.conv2d(out1[:, i:i+1,:,:], self.weight1_1, stride=1, padding=1, groups=1)
+                out2_2 = F.conv2d(out1[:, i+1:i+2,:,:], self.weight1_2, stride=1, padding=1, groups=1)
                 if i == 0:
-                    out2 = self.conv2(out1[:, i:i+cfg.filter_mode,:,:])
+                    out2 = torch.cat([out2_1, out2_2], dim=1)
                 else:
-                    temp_out2 = self.conv2(out1[:,i:i+cfg.filter_mode,:,:])
-                    out2 = torch.cat(([out2, temp_out2]), dim=1)
+                    out2 = torch.cat(([out2, out2_1, out2_2]), dim=1)
+
+            print("out2 size: {}".format(out2.size()))
             x_pred_mask = self.bn2(out2)
+
+        elif cfg.filter_mode == 4:
+            raise NotImplementedError
+        elif cfg.filter_mode == 8:
+            raise NotImplementedError
+        elif cfg.filter_mode not in [0,1,2,4,8]:
+            raise NotImplementedError
 
 
         ### Done custimized
