@@ -48,8 +48,8 @@ class ZAP(nn.Module):
 
             self.weight2_1 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
             self.weight2_2 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
-            self.weight2_1 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
-            self.weight2_2 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_3 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_4 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
 
             nn.init.kaiming_normal_(self.weight1_1, mode='fan_out', nonlinearity='relu')
             nn.init.kaiming_normal_(self.weight1_2, mode='fan_out', nonlinearity='relu')
@@ -59,6 +59,43 @@ class ZAP(nn.Module):
             nn.init.kaiming_normal_(self.weight2_2, mode='fan_out', nonlinearity='relu')
             nn.init.kaiming_normal_(self.weight2_3, mode='fan_out', nonlinearity='relu')
             nn.init.kaiming_normal_(self.weight2_4, mode='fan_out', nonlinearity='relu')
+
+        elif cfg.filter_mode == 8:
+            self.weight1_1 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_2 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_3 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_4 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_5 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_6 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_7 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_8 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+
+            self.weight2_1 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_2 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_3 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_4 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_5 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_6 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_7 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_8 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+
+            nn.init.kaiming_normal_(self.weight1_1, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_2, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_3, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_4, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_5, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_6, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_7, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_8, mode='fan_out', nonlinearity='relu')
+
+            nn.init.kaiming_normal_(self.weight2_1, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_2, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_3, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_4, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_5, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_6, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_7, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_8, mode='fan_out', nonlinearity='relu')
 
         elif cfg.filter_mode not in [0,1,2,4,8]:
             raise NotImplementedError
@@ -121,7 +158,7 @@ class ZAP(nn.Module):
 
             for i in range(0, self.planes, cfg.filter_mode):
                 if i == 0:
-                    out2 = F.conv2d(out1[:, i:i+cfg.filter_mode,:,:], self.weight2, stride=1, padding=1, groups=cfg.filter_mode)
+                    out2 = F.conv2d(out1[:, i:i+cfg.filter_mode,:,:],   self.weight2, stride=1, padding=1, groups=cfg.filter_mode)
                 else:
                     temp_out = F.conv2d(out1[:, i:i+cfg.filter_mode,:,:], self.weight2, stride=1, padding=1, groups=cfg.filter_mode)
                     out2 = torch.cat(([out2, temp_out]), dim=1)
@@ -136,7 +173,7 @@ class ZAP(nn.Module):
             out2_1 = None
             out2_2 = None
             for i in range(0, self.planes, cfg.filter_mode):
-                out1_1 = F.conv2d(x[:, i:i+1,:,:], self.weight1_1, stride=1, padding=1, groups=1)
+                out1_1 = F.conv2d(x[:, i:i+1,:,:],   self.weight1_1, stride=1, padding=1, groups=1)
                 out1_2 = F.conv2d(x[:, i+1:i+2,:,:], self.weight1_2, stride=1, padding=1, groups=1)
                 if i == 0:
                     out1 = torch.cat([out1_1, out1_2], dim=1)
@@ -145,23 +182,117 @@ class ZAP(nn.Module):
 
             out1 = self.bn1(out1)
             out1 = F.relu(out1)
-            print("out1 size: {}".format(out1.size()))
+            #  print("out1 size: {}".format(out1.size()))
 
             for i in range(0, self.planes, cfg.filter_mode):
-                out2_1 = F.conv2d(out1[:, i:i+1,:,:], self.weight1_1, stride=1, padding=1, groups=1)
-                out2_2 = F.conv2d(out1[:, i+1:i+2,:,:], self.weight1_2, stride=1, padding=1, groups=1)
+                out2_1 = F.conv2d(out1[:, i:i+1,:,:],   self.weight2_1, stride=1, padding=1, groups=1)
+                out2_2 = F.conv2d(out1[:, i+1:i+2,:,:], self.weight2_2, stride=1, padding=1, groups=1)
                 if i == 0:
                     out2 = torch.cat([out2_1, out2_2], dim=1)
                 else:
                     out2 = torch.cat(([out2, out2_1, out2_2]), dim=1)
 
-            print("out2 size: {}".format(out2.size()))
+            #  print("out2 size: {}".format(out2.size()))
             x_pred_mask = self.bn2(out2)
 
         elif cfg.filter_mode == 4:
-            raise NotImplementedError
+            out1 = None
+            out2 = None
+
+            out1_1 = None
+            out1_2 = None
+            out1_3 = None
+            out1_4 = None
+
+            out2_1 = None
+            out2_2 = None
+            out2_3 = None
+            out2_4 = None
+
+            for i in range(0, self.planes, cfg.filter_mode):
+                out1_1 = F.conv2d(x[:, i:i+1,:,:],   self.weight1_1, stride=1, padding=1, groups=1)
+                out1_2 = F.conv2d(x[:, i+1:i+2,:,:], self.weight1_2, stride=1, padding=1, groups=1)
+                out1_3 = F.conv2d(x[:, i+2:i+3,:,:], self.weight1_3, stride=1, padding=1, groups=1)
+                out1_4 = F.conv2d(x[:, i+3:i+4,:,:], self.weight1_4, stride=1, padding=1, groups=1)
+                if i == 0:
+                    out1 = torch.cat([out1_1, out1_2, out1_3, out1_4], dim=1)
+                else:
+                    out1 = torch.cat(([out1, out1_1, out1_2, out1_3, out1_4]), dim=1)
+
+            out1 = self.bn1(out1)
+            out1 = F.relu(out1)
+            #  print("out1 size: {}".format(out1.size()))
+
+            for i in range(0, self.planes, cfg.filter_mode):
+                out2_1 = F.conv2d(out1[:, i:i+1,:,:],   self.weight2_1, stride=1, padding=1, groups=1)
+                out2_2 = F.conv2d(out1[:, i+1:i+2,:,:], self.weight2_2, stride=1, padding=1, groups=1)
+                out2_3 = F.conv2d(out1[:, i+2:i+3,:,:], self.weight2_3, stride=1, padding=1, groups=1)
+                out2_4 = F.conv2d(out1[:, i+3:i+4,:,:], self.weight2_4, stride=1, padding=1, groups=1)
+                if i == 0:
+                    out2 = torch.cat([out2_1, out2_2, out2_3, out2_4], dim=1)
+                else:
+                    out2 = torch.cat(([out2, out2_1, out2_2, out2_3, out2_4]), dim=1)
+
+            #  print("out2 size: {}".format(out2.size()))
+            x_pred_mask = self.bn2(out2)
+
         elif cfg.filter_mode == 8:
-            raise NotImplementedError
+            out1 = None
+            out2 = None
+
+            out1_1 = None
+            out1_2 = None
+            out1_3 = None
+            out1_4 = None
+            out1_5 = None
+            out1_6 = None
+            out1_7 = None
+            out1_8 = None
+
+            out2_1 = None
+            out2_2 = None
+            out2_3 = None
+            out2_4 = None
+            out2_5 = None
+            out2_6 = None
+            out2_7 = None
+            out2_8 = None
+
+            for i in range(0, self.planes, cfg.filter_mode):
+                out1_1 = F.conv2d(x[:, i:i+1,:,:],   self.weight1_1, stride=1, padding=1, groups=1)
+                out1_2 = F.conv2d(x[:, i+1:i+2,:,:], self.weight1_2, stride=1, padding=1, groups=1)
+                out1_3 = F.conv2d(x[:, i+2:i+3,:,:], self.weight1_3, stride=1, padding=1, groups=1)
+                out1_4 = F.conv2d(x[:, i+3:i+4,:,:], self.weight1_4, stride=1, padding=1, groups=1)
+                out1_5 = F.conv2d(x[:, i+4:i+5,:,:], self.weight1_5, stride=1, padding=1, groups=1)
+                out1_6 = F.conv2d(x[:, i+5:i+6,:,:], self.weight1_6, stride=1, padding=1, groups=1)
+                out1_7 = F.conv2d(x[:, i+6:i+7,:,:], self.weight1_7, stride=1, padding=1, groups=1)
+                out1_8 = F.conv2d(x[:, i+7:i+8,:,:], self.weight1_8, stride=1, padding=1, groups=1)
+                if i == 0:
+                    out1 = torch.cat([out1_1, out1_2, out1_3, out1_4, out1_5, out1_6, out1_7, out1_8], dim=1)
+                else:
+                    out1 = torch.cat(([out1, out1_1, out1_2, out1_3, out1_4, out1_5, out1_6, out1_7, out1_8]), dim=1)
+
+            out1 = self.bn1(out1)
+            out1 = F.relu(out1)
+            #  print("out1 size: {}".format(out1.size()))
+
+            for i in range(0, self.planes, cfg.filter_mode):
+                out2_1 = F.conv2d(out1[:, i:i+1,:,:],   self.weight2_1, stride=1, padding=1, groups=1)
+                out2_2 = F.conv2d(out1[:, i+1:i+2,:,:], self.weight2_2, stride=1, padding=1, groups=1)
+                out2_3 = F.conv2d(out1[:, i+2:i+3,:,:], self.weight2_3, stride=1, padding=1, groups=1)
+                out2_4 = F.conv2d(out1[:, i+3:i+4,:,:], self.weight2_4, stride=1, padding=1, groups=1)
+                out2_5 = F.conv2d(out1[:, i+4:i+5,:,:], self.weight2_5, stride=1, padding=1, groups=1)
+                out2_6 = F.conv2d(out1[:, i+5:i+6,:,:], self.weight2_6, stride=1, padding=1, groups=1)
+                out2_7 = F.conv2d(out1[:, i+6:i+7,:,:], self.weight2_7, stride=1, padding=1, groups=1)
+                out2_8 = F.conv2d(out1[:, i+7:i+8,:,:], self.weight2_8, stride=1, padding=1, groups=1)
+                if i == 0:
+                    out2 = torch.cat([out2_1, out2_2, out2_3, out2_4, out2_5, out2_6, out2_7, out2_8], dim=1)
+                else:
+                    out2 = torch.cat(([out2, out2_1, out2_2, out2_3, out2_4, out2_5, out2_6, out2_7, out2_8]), dim=1)
+
+            #  print("out2 size: {}".format(out2.size()))
+            x_pred_mask = self.bn2(out2)
+
         elif cfg.filter_mode not in [0,1,2,4,8]:
             raise NotImplementedError
 

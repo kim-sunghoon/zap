@@ -17,7 +17,7 @@ Filter mode for zap
 :4 --> 4*K*K
 :8 --> 8*K*K
 """
-filter_mode = 2
+filter_mode = 8
 print("filter mode: {}".format(filter_mode))
 
 
