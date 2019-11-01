@@ -220,7 +220,7 @@ def eval_roc(train_gen, test_gen, arch, dataset, pred_chkps_dict, model_chkp=Non
     ## make csv logger
     filename = os.path.join(cfg.basedir,"{}-{}-filter{}.csv".format(arch, dataset, cfg.filter_mode))
     with open(filename, "w") as csv_output:
-        csv_output.write("mask,th,top-1,top-5\n")
+        csv_output.write("mask,th,F{}-top1,F{}-top5\n".format(cfg.filter_mode, cfg.filter_mode))
 
     for mask, chkp in pred_chkps_dict.items():
         if mask_list is not None:
