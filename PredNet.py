@@ -97,7 +97,209 @@ class ZAP(nn.Module):
             nn.init.kaiming_normal_(self.weight2_7, mode='fan_out', nonlinearity='relu')
             nn.init.kaiming_normal_(self.weight2_8, mode='fan_out', nonlinearity='relu')
 
-        elif cfg.filter_mode not in [0,1,2,4,8]:
+        elif cfg.filter_mode == 16:
+            self.weight1_1 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_2 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_3 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_4 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_5 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_6 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_7 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_8 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_9 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_10 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_11 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_12 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_13 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_14 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_15 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_16 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+
+            self.weight2_1 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_2 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_3 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_4 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_5 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_6 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_7 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_8 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_9 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_10 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_11 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_12 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_13 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_14 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_15 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_16 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+
+            nn.init.kaiming_normal_(self.weight1_1, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_2, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_3, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_4, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_5, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_6, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_7, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_8, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_9, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_10, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_11, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_12, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_13, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_14, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_15, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_16, mode='fan_out', nonlinearity='relu')
+
+            nn.init.kaiming_normal_(self.weight2_1, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_2, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_3, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_4, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_5, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_6, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_7, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_8, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_9, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_10, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_11, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_12, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_13, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_14, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_15, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_16, mode='fan_out', nonlinearity='relu')
+
+        elif cfg.filter_mode == 32:
+            self.weight1_1 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_2 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_3 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_4 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_5 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_6 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_7 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_8 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_9 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_10 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_11 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_12 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_13 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_14 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_15 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_16 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_17 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_18 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_19 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_20 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_21 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_22 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_23 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_24 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_25 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_26 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_27 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_28 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_29 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_30 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_31 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight1_32 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+
+            self.weight2_1 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_2 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_3 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_4 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_5 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_6 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_7 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_8 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_9 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_10 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_11 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_12 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_13 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_14 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_15 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_16 = torch.empty((1,1, 3,3), requires_grad = True).to("cuda")
+            self.weight2_17 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_18 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_19 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_20 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_21 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_22 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_23 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_24 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_25 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_26 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_27 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_28 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_29 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_30 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_31 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+            self.weight2_32 = torch.empty((1,1,3,3), requires_grad = True).to("cuda")
+
+            nn.init.kaiming_normal_(self.weight1_1, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_2, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_3, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_4, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_5, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_6, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_7, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_8, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_9, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_10, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_11, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_12, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_13, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_14, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_15, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_16, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_17, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_18, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_19, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_20, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_21, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_22, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_23, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_24, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_25, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_26, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_27, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_28, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_29, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_30, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_31, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight1_32, mode='fan_out', nonlinearity='relu')
+
+            nn.init.kaiming_normal_(self.weight2_1, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_2, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_3, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_4, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_5, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_6, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_7, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_8, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_9, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_10, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_11, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_12, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_13, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_14, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_15, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_16, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_17, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_18, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_19, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_20, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_21, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_22, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_23, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_24, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_25, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_26, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_27, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_28, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_29, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_30, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_31, mode='fan_out', nonlinearity='relu')
+            nn.init.kaiming_normal_(self.weight2_32, mode='fan_out', nonlinearity='relu')
+
+        elif cfg.filter_mode not in [0,1,2,4,8,16,32]:
             raise NotImplementedError
 
 
@@ -293,7 +495,251 @@ class ZAP(nn.Module):
             #  print("out2 size: {}".format(out2.size()))
             x_pred_mask = self.bn2(out2)
 
-        elif cfg.filter_mode not in [0,1,2,4,8]:
+        elif cfg.filter_mode == 16:
+            out1 = None
+            out2 = None
+
+            out1_1 = None
+            out1_2 = None
+            out1_3 = None
+            out1_4 = None
+            out1_5 = None
+            out1_6 = None
+            out1_7 = None
+            out1_8 = None
+            out1_9 = None
+            out1_10 = None
+            out1_11 = None
+            out1_12 = None
+            out1_13 = None
+            out1_14 = None
+            out1_15 = None
+            out1_16 = None
+
+            out2_1 = None
+            out2_2 = None
+            out2_3 = None
+            out2_4 = None
+            out2_5 = None
+            out2_6 = None
+            out2_7 = None
+            out2_8 = None
+            out2_9 = None
+            out2_10 = None
+            out2_11 = None
+            out2_12 = None
+            out2_13 = None
+            out2_14 = None
+            out2_15 = None
+            out2_16 = None
+
+            for i in range(0, self.planes, cfg.filter_mode):
+                out1_1  = F.conv2d(x[:, i:i+1,:,:], self.weight1_1, stride  =1, padding=1, groups=1)
+                out1_2  = F.conv2d(x[:, i+1:i+2,:,:], self.weight1_2, stride=1, padding=1, groups=1)
+                out1_3  = F.conv2d(x[:, i+2:i+3,:,:], self.weight1_3, stride=1, padding=1, groups=1)
+                out1_4  = F.conv2d(x[:, i+3:i+4,:,:], self.weight1_4, stride=1, padding=1, groups=1)
+                out1_5  = F.conv2d(x[:, i+4:i+5,:,:], self.weight1_5, stride=1, padding=1, groups=1)
+                out1_6  = F.conv2d(x[:, i+5:i+6,:,:], self.weight1_6, stride=1, padding=1, groups=1)
+                out1_7  = F.conv2d(x[:, i+6:i+7,:,:], self.weight1_7, stride=1, padding=1, groups=1)
+                out1_8  = F.conv2d(x[:, i+7:i+8,:,:], self.weight1_8, stride=1, padding=1, groups=1)
+                out1_9  = F.conv2d(x[:, i+8:i+9,:,:], self.weight1_9, stride  =1, padding=1, groups=1)
+                out1_10 = F.conv2d(x[:, i+9:i+10,:,:], self.weight1_10, stride=1, padding=1, groups=1)
+                out1_11 = F.conv2d(x[:, i+10:i+11,:,:], self.weight1_11, stride=1, padding=1, groups=1)
+                out1_12 = F.conv2d(x[:, i+11:i+12,:,:], self.weight1_12, stride=1, padding=1, groups=1)
+                out1_13 = F.conv2d(x[:, i+12:i+13,:,:], self.weight1_13, stride=1, padding=1, groups=1)
+                out1_14 = F.conv2d(x[:, i+13:i+14,:,:], self.weight1_14, stride=1, padding=1, groups=1)
+                out1_15 = F.conv2d(x[:, i+14:i+15,:,:], self.weight1_15, stride=1, padding=1, groups=1)
+                out1_16 = F.conv2d(x[:, i+15:i+16,:,:], self.weight1_16, stride=1, padding=1, groups=1)
+                if i == 0:
+                    out1 = torch.cat([out1_1, out1_2, out1_3, out1_4, out1_5, out1_6, out1_7, out1_8, out1_9, out1_10, out1_11, out1_12, out1_13, out1_14, out1_15, out1_16], dim=1)
+                else:
+                    out1 = torch.cat([out1, out1_1, out1_2, out1_3, out1_4, out1_5, out1_6, out1_7, out1_8, out1_9, out1_10, out1_11, out1_12, out1_13, out1_14, out1_15, out1_16], dim=1)
+
+            out1 = self.bn1(out1)
+            out1 = F.relu(out1)
+            #  print("out1 size: {}".format(out1.size()))
+
+            for i in range(0, self.planes, cfg.filter_mode):
+                out2_1  = F.conv2d(out1[:, i:i+1,:,:], self.weight2_1, stride   =1, padding=1, groups=1)
+                out2_2  = F.conv2d(out1[:, i+1:i+2,:,:], self.weight2_2, stride =1, padding=1, groups=1)
+                out2_3  = F.conv2d(out1[:, i+2:i+3,:,:], self.weight2_3, stride =1, padding=1, groups=1)
+                out2_4  = F.conv2d(out1[:, i+3:i+4,:,:], self.weight2_4, stride =1, padding=1, groups=1)
+                out2_5  = F.conv2d(out1[:, i+4:i+5,:,:], self.weight2_5, stride =1, padding=1, groups=1)
+                out2_6  = F.conv2d(out1[:, i+5:i+6,:,:], self.weight2_6, stride =1, padding=1, groups=1)
+                out2_7  = F.conv2d(out1[:, i+6:i+7,:,:], self.weight2_7, stride =1, padding=1, groups=1)
+                out2_8  = F.conv2d(out1[:, i+7:i+8,:,:], self.weight2_8, stride =1, padding=1, groups=1)
+                out2_9  = F.conv2d(out1[:, i+8:i+9,:,:], self.weight2_9, stride=1, padding=1, groups=1)
+                out2_10 = F.conv2d(out1[:, i+9:i+10,:,:], self.weight2_10, stride=1, padding=1, groups=1)
+                out2_11 = F.conv2d(out1[:, i+10:i+11,:,:], self.weight2_11, stride =1, padding=1, groups=1)
+                out2_12 = F.conv2d(out1[:, i+11:i+12,:,:], self.weight2_12, stride =1, padding=1, groups=1)
+                out2_13 = F.conv2d(out1[:, i+12:i+13,:,:], self.weight2_13, stride =1, padding=1, groups=1)
+                out2_14 = F.conv2d(out1[:, i+13:i+14,:,:], self.weight2_14, stride =1, padding=1, groups=1)
+                out2_15 = F.conv2d(out1[:, i+14:i+15,:,:], self.weight2_15, stride =1, padding=1, groups=1)
+                out2_16 = F.conv2d(out1[:, i+15:i+16,:,:], self.weight2_16, stride =1, padding=1, groups=1)
+                if i == 0:
+                    out2 = torch.cat([out2_1, out2_2, out2_3, out2_4, out2_5, out2_6, out2_7, out2_8, out2_9, out2_10, out2_11, out2_12, out2_13, out2_14, out2_15, out2_16], dim=1)
+                else:
+                    out2 = torch.cat([out2, out2_1, out2_2, out2_3, out2_4, out2_5, out2_6, out2_7, out2_8, out2_9, out2_10, out2_11, out2_12, out2_13, out2_14, out2_15, out2_16], dim=1)
+                    #  out2 = torch.cat(([out2, out2_1, out2_2, out2_3, out2_4, out2_5, out2_6, out2_7, out2_8]), dim=1)
+
+            #  print("out2 size: {}".format(out2.size()))
+            x_pred_mask = self.bn2(out2)
+
+        elif cfg.filter_mode == 32:
+            out1 = None
+            out2 = None
+
+            out1_1 = None
+            out1_2 = None
+            out1_3 = None
+            out1_4 = None
+            out1_5 = None
+            out1_6 = None
+            out1_7 = None
+            out1_8 = None
+            out1_9 = None
+            out1_10 = None
+            out1_11 = None
+            out1_12 = None
+            out1_13 = None
+            out1_14 = None
+            out1_15 = None
+            out1_16 = None
+            out1_17 = None
+            out1_18 = None
+            out1_19 = None
+            out1_20 = None
+            out1_21 = None
+            out1_22 = None
+            out1_23 = None
+            out1_24 = None
+            out1_25 = None
+            out1_26 = None
+            out1_27 = None
+            out1_28 = None
+            out1_29 = None
+            out1_30 = None
+            out1_31 = None
+            out1_32 = None
+
+            out2_1 = None
+            out2_2 = None
+            out2_3 = None
+            out2_4 = None
+            out2_5 = None
+            out2_6 = None
+            out2_7 = None
+            out2_8 = None
+            out2_9 = None
+            out2_10 = None
+            out2_11 = None
+            out2_12 = None
+            out2_13 = None
+            out2_14 = None
+            out2_15 = None
+            out2_16 = None
+            out2_17 = None
+            out2_18 = None
+            out2_19 = None
+            out2_20 = None
+            out2_21 = None
+            out2_22 = None
+            out2_23 = None
+            out2_24 = None
+            out2_25 = None
+            out2_26 = None
+            out2_27 = None
+            out2_28 = None
+            out2_29 = None
+            out2_30 = None
+            out2_31 = None
+            out2_32 = None
+
+            for i in range(0, self.planes, cfg.filter_mode):
+                out1_1  = F.conv2d(x[:, i:i+1,:,:], self.weight1_1, stride  =1, padding=1, groups=1)
+                out1_2  = F.conv2d(x[:, i+1:i+2,:,:], self.weight1_2, stride=1, padding=1, groups=1)
+                out1_3  = F.conv2d(x[:, i+2:i+3,:,:], self.weight1_3, stride=1, padding=1, groups=1)
+                out1_4  = F.conv2d(x[:, i+3:i+4,:,:], self.weight1_4, stride=1, padding=1, groups=1)
+                out1_5  = F.conv2d(x[:, i+4:i+5,:,:], self.weight1_5, stride=1, padding=1, groups=1)
+                out1_6  = F.conv2d(x[:, i+5:i+6,:,:], self.weight1_6, stride=1, padding=1, groups=1)
+                out1_7  = F.conv2d(x[:, i+6:i+7,:,:], self.weight1_7, stride=1, padding=1, groups=1)
+                out1_8  = F.conv2d(x[:, i+7:i+8,:,:], self.weight1_8, stride=1, padding=1, groups=1)
+                out1_9  = F.conv2d(x[:, i+8:i+9,:,:], self.weight1_9, stride=1, padding=1, groups=1)
+                out1_10 = F.conv2d(x[:, i+9:i+10,:,:], self.weight1_10, stride=1, padding=1, groups=1)
+                out1_11 = F.conv2d(x[:, i+10:i+11,:,:], self.weight1_11, stride=1, padding=1, groups=1)
+                out1_12 = F.conv2d(x[:, i+11:i+12,:,:], self.weight1_12, stride=1, padding=1, groups=1)
+                out1_13 = F.conv2d(x[:, i+12:i+13,:,:], self.weight1_13, stride=1, padding=1, groups=1)
+                out1_14 = F.conv2d(x[:, i+13:i+14,:,:], self.weight1_14, stride=1, padding=1, groups=1)
+                out1_15 = F.conv2d(x[:, i+14:i+15,:,:], self.weight1_15, stride=1, padding=1, groups=1)
+                out1_16 = F.conv2d(x[:, i+15:i+16,:,:], self.weight1_16, stride=1, padding=1, groups=1)
+                out1_17 = F.conv2d(x[:, i+16:i+17,:,:], self.weight1_17, stride=1, padding=1, groups=1)
+                out1_18 = F.conv2d(x[:, i+17:i+18,:,:], self.weight1_18, stride=1, padding=1, groups=1)
+                out1_19 = F.conv2d(x[:, i+18:i+19,:,:], self.weight1_19, stride=1, padding=1, groups=1)
+                out1_20 = F.conv2d(x[:, i+19:i+20,:,:], self.weight1_20, stride=1, padding=1, groups=1)
+                out1_21 = F.conv2d(x[:, i+20:i+21,:,:], self.weight1_21, stride=1, padding=1, groups=1)
+                out1_22 = F.conv2d(x[:, i+21:i+22,:,:], self.weight1_22, stride=1, padding=1, groups=1)
+                out1_23 = F.conv2d(x[:, i+22:i+23,:,:], self.weight1_23, stride=1, padding=1, groups=1)
+                out1_24 = F.conv2d(x[:, i+23:i+24,:,:], self.weight1_24, stride=1, padding=1, groups=1)
+                out1_25 = F.conv2d(x[:, i+24:i+25,:,:], self.weight1_25, stride=1, padding=1, groups=1)
+                out1_26 = F.conv2d(x[:, i+25:i+26,:,:], self.weight1_26, stride=1, padding=1, groups=1)
+                out1_27 = F.conv2d(x[:, i+26:i+27,:,:], self.weight1_27, stride=1, padding=1, groups=1)
+                out1_28 = F.conv2d(x[:, i+27:i+28,:,:], self.weight1_28, stride=1, padding=1, groups=1)
+                out1_29 = F.conv2d(x[:, i+28:i+29,:,:], self.weight1_29, stride=1, padding=1, groups=1)
+                out1_30 = F.conv2d(x[:, i+29:i+30,:,:], self.weight1_30, stride=1, padding=1, groups=1)
+                out1_31 = F.conv2d(x[:, i+30:i+31,:,:], self.weight1_31, stride=1, padding=1, groups=1)
+                out1_32 = F.conv2d(x[:, i+31:i+32,:,:], self.weight1_32, stride=1, padding=1, groups=1)
+                if i == 0:
+                    out1 = torch.cat([out1_1, out1_2, out1_3, out1_4, out1_5, out1_6, out1_7, out1_8, out1_9, out1_10, out1_11, out1_12, out1_13, out1_14, out1_15, out1_16, out1_17, out1_18, out1_19, out1_20, out1_21, out1_22, out1_23, out1_24, out1_25, out1_26, out1_27, out1_28, out1_29, out1_30, out1_31, out1_32], dim=1)
+                else:
+                    out1 = torch.cat([out1, out1_1, out1_2, out1_3, out1_4, out1_5, out1_6, out1_7, out1_8, out1_9, out1_10, out1_11, out1_12, out1_13, out1_14, out1_15, out1_16, out1_17, out1_18, out1_19, out1_20, out1_21, out1_22, out1_23, out1_24, out1_25, out1_26, out1_27, out1_28, out1_29, out1_30, out1_31, out1_32], dim=1)
+                    #  out1 = torch.cat([out1, out1_1, out1_2, out1_3, out1_4, out1_5, out1_6, out1_7, out1_8, out1_9, out1_10, out1_11, out1_12, out1_13, out1_14, out1_15, out1_16], dim=1)
+
+            out1 = self.bn1(out1)
+            out1 = F.relu(out1)
+            #  print("out1 size: {}".format(out1.size()))
+
+            for i in range(0, self.planes, cfg.filter_mode):
+                out2_1  = F.conv2d(out1[:, i:i+1,:,:], self.weight2_1, stride=1, padding=1, groups=1)
+                out2_2  = F.conv2d(out1[:, i+1:i+2,:,:], self.weight2_2, stride=1, padding=1, groups=1)
+                out2_3  = F.conv2d(out1[:, i+2:i+3,:,:], self.weight2_3, stride=1, padding=1, groups=1)
+                out2_4  = F.conv2d(out1[:, i+3:i+4,:,:], self.weight2_4, stride=1, padding=1, groups=1)
+                out2_5  = F.conv2d(out1[:, i+4:i+5,:,:], self.weight2_5, stride=1, padding=1, groups=1)
+                out2_6  = F.conv2d(out1[:, i+5:i+6,:,:], self.weight2_6, stride=1, padding=1, groups=1)
+                out2_7  = F.conv2d(out1[:, i+6:i+7,:,:], self.weight2_7, stride=1, padding=1, groups=1)
+                out2_8  = F.conv2d(out1[:, i+7:i+8,:,:], self.weight2_8, stride=1, padding=1, groups=1)
+                out2_9  = F.conv2d(out1[:, i+8:i+9,:,:], self.weight2_9, stride=1, padding=1, groups=1)
+                out2_10 = F.conv2d(out1[:, i+9:i+10,:,:], self.weight1_10, stride=1, padding=1, groups=1)
+                out2_11 = F.conv2d(out1[:, i+10:i+11,:,:], self.weight2_11, stride=1, padding=1, groups=1)
+                out2_12 = F.conv2d(out1[:, i+11:i+12,:,:], self.weight2_12, stride=1, padding=1, groups=1)
+                out2_13 = F.conv2d(out1[:, i+12:i+13,:,:], self.weight2_13, stride=1, padding=1, groups=1)
+                out2_14 = F.conv2d(out1[:, i+13:i+14,:,:], self.weight2_14, stride=1, padding=1, groups=1)
+                out2_15 = F.conv2d(out1[:, i+14:i+15,:,:], self.weight2_15, stride=1, padding=1, groups=1)
+                out2_16 = F.conv2d(out1[:, i+15:i+16,:,:], self.weight2_16, stride=1, padding=1, groups=1)
+                out2_17 = F.conv2d(out1[:, i+16:i+17,:,:], self.weight2_17, stride=1, padding=1, groups=1)
+                out2_18 = F.conv2d(out1[:, i+17:i+18,:,:], self.weight2_18, stride=1, padding=1, groups=1)
+                out2_19 = F.conv2d(out1[:, i+18:i+19,:,:], self.weight2_19, stride=1, padding=1, groups=1)
+                out2_20 = F.conv2d(out1[:, i+19:i+20,:,:], self.weight2_20, stride=1, padding=1, groups=1)
+                out2_21 = F.conv2d(out1[:, i+20:i+21,:,:], self.weight2_21, stride=1, padding=1, groups=1)
+                out2_22 = F.conv2d(out1[:, i+21:i+22,:,:], self.weight2_22, stride=1, padding=1, groups=1)
+                out2_23 = F.conv2d(out1[:, i+22:i+23,:,:], self.weight2_23, stride=1, padding=1, groups=1)
+                out2_24 = F.conv2d(out1[:, i+23:i+24,:,:], self.weight2_24, stride=1, padding=1, groups=1)
+                out2_25 = F.conv2d(out1[:, i+24:i+25,:,:], self.weight2_25, stride=1, padding=1, groups=1)
+                out2_26 = F.conv2d(out1[:, i+25:i+26,:,:], self.weight2_26, stride=1, padding=1, groups=1)
+                out2_27 = F.conv2d(out1[:, i+26:i+27,:,:], self.weight2_27, stride=1, padding=1, groups=1)
+                out2_28 = F.conv2d(out1[:, i+27:i+28,:,:], self.weight2_28, stride=1, padding=1, groups=1)
+                out2_29 = F.conv2d(out1[:, i+28:i+29,:,:], self.weight2_29, stride=1, padding=1, groups=1)
+                out2_30 = F.conv2d(out1[:, i+29:i+30,:,:], self.weight2_30, stride=1, padding=1, groups=1)
+                out2_31 = F.conv2d(out1[:, i+30:i+31,:,:], self.weight2_31, stride=1, padding=1, groups=1)
+                out2_32 = F.conv2d(out1[:, i+31:i+32,:,:], self.weight2_32, stride=1, padding=1, groups=1)
+                if i == 0:
+                    out2 = torch.cat([out2_1, out2_2, out2_3, out2_4, out2_5, out2_6, out2_7, out2_8, out2_9, out2_10, out2_11, out2_12, out2_13, out2_14, out2_15, out2_16, out2_17, out2_18, out2_19, out2_20, out2_21, out2_22, out2_23, out2_24, out2_25, out2_26, out2_27, out2_28, out2_29, out2_30, out2_31, out2_32], dim=1)
+                else:
+                    out2 = torch.cat([out2, out2_1, out2_2, out2_3, out2_4, out2_5, out2_6, out2_7, out2_8, out2_9, out2_10, out2_11, out2_12, out2_13, out2_14, out2_15, out2_16, out2_17, out2_18, out2_19, out2_20, out2_21, out2_22, out2_23, out2_24, out2_25, out2_26, out2_27, out2_28, out2_29, out2_30, out2_31, out2_32], dim=1)
+
+            #  print("out2 size: {}".format(out2.size()))
+            x_pred_mask = self.bn2(out2)
+
+        elif cfg.filter_mode not in [0,1,2,4,8,16,32]:
             raise NotImplementedError
 
 
