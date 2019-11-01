@@ -64,7 +64,7 @@ def train_pred_layers(train_gen, test_gen, arch, dataset, model_chkp=None, mask_
         mask_list = [6, 5, 4, 3]
 
     for mask in mask_list:
-        cfg.LOG.start_new_log(name='{}-{}_train_mask-{}'.format(arch, dataset, mask))
+        cfg.LOG.start_new_log(name='{}-{}_tr_mask-{}'.format(arch, dataset, mask))
 
         mask = int(mask)
         nn = NeuralNet(arch, dataset, model_chkp=model_chkp)
@@ -123,7 +123,7 @@ def eval_model(train_gen, test_gen, arch, dataset, pred_chkps_dict, model_chkp=N
         pred_chkps = checkpoint.get_chkp_files([chkp])
 
         for threshold in th_list:
-            cfg.LOG.start_new_log(name='{}-{}_full-model_mask-{}_th-{}'.format(arch, dataset, mask, threshold,))
+            cfg.LOG.start_new_log(name='{}-{}_eval_retrain_mask-{}_th-{}'.format(arch, dataset, mask, threshold))
             cfg.LOG.write_title("Mask={}".format(mask), pad_width=40, pad_symbol='=')
 
             nn = NeuralNet(arch, dataset, model_chkp=model_chkp)
@@ -181,7 +181,7 @@ def eval_pred_layers(test_gen, arch, dataset, pred_chkps_db, model_chkp=None, ma
         mask = int(mask)
         pred_chkps = checkpoint.get_chkp_files([chkp])
 
-        cfg.LOG.start_new_log(name='{}-{}_zap-analysis_mask-{}'.format(arch, dataset, mask))
+        cfg.LOG.start_new_log(name='{}-{}_eval_isol_mask-{}'.format(arch, dataset, mask))
         cfg.LOG.write_title("Mask={}".format(mask), pad_width=40, pad_symbol='=')
 
         nn = NeuralNet(arch, dataset, model_chkp=model_chkp)
@@ -217,6 +217,11 @@ def eval_roc(train_gen, test_gen, arch, dataset, pred_chkps_dict, model_chkp=Non
     :param mask_list: specific mask list to train with (default: [6, 5, 4, 3])
     :param recoup_bn: run BN recoup epoch (default: False)
     """
+    ## make csv logger
+    filename = os.path.join(cfg.basedir,"{}-{}-filter{}.csv".format(arch, dataset, cfg.filter_mode))
+    with open(filename, "w") as csv_output:
+        csv_output.write("mask,th,top-1,top-5\n")
+
     for mask, chkp in pred_chkps_dict.items():
         if mask_list is not None:
             if str(mask) not in mask_list:
@@ -225,7 +230,7 @@ def eval_roc(train_gen, test_gen, arch, dataset, pred_chkps_dict, model_chkp=Non
         mask = int(mask)
         pred_chkps = checkpoint.get_chkp_files([chkp])
 
-        cfg.LOG.start_new_log(name='{}-{}_zap-analysis-roc_mask-{}'.format(arch, dataset, mask))
+        cfg.LOG.start_new_log(name='{}-{}_eval_roc_mask-{}'.format(arch, dataset, mask))
         cfg.LOG.write_title("Mask={}".format(mask), pad_width=40, pad_symbol='=')
 
         nn = NeuralNet(arch, dataset, model_chkp=model_chkp)
@@ -238,6 +243,7 @@ def eval_roc(train_gen, test_gen, arch, dataset, pred_chkps_dict, model_chkp=Non
             cfg.LOG.write('Disabled first layer in {}'.format(arch))
             nn.model.disabled_pred_layers.append(0)
             nn.model.pred_layers[0].disable_layer()
+
 
         for i, threshold in enumerate(np.around(np.arange(cfg.STATS_ROC_MIN, cfg.STATS_ROC_MAX, cfg.STATS_ROC_STEP), 2)):
             cfg.LOG.write_title("Threshold={}".format(threshold), pad_width=40, pad_symbol='=')
@@ -255,7 +261,7 @@ def eval_roc(train_gen, test_gen, arch, dataset, pred_chkps_dict, model_chkp=Non
                 nn.model.disable_pred_layers_grad()
                 nn.train(train_gen, test_gen, 1, lr=0.0, wd=0.0, stats=[cfg.STATS_GENERAL, cfg.STATS_ROC])
             else:
-                nn.test(test_gen, stats=[cfg.STATS_GENERAL, cfg.STATS_ROC])
+                nn.test_with_csv(test_gen, filename=filename, mask=mask, threshold=threshold, stats=[cfg.STATS_GENERAL, cfg.STATS_ROC])
 
         cfg.LOG.close_log()
         nn = None

@@ -108,6 +108,67 @@ class NeuralNet:
 
         return top1.avg
 
+    def test_with_csv(self, test_gen, filename, mask, threshold, stats=None, reset_output=True):
+        batch_time = self.AverageMeter('Time', ':6.3f')
+        losses = self.AverageMeter('Loss', ':.4e')
+        top1 = self.AverageMeter('Acc@1', ':6.2f')
+        top5 = self.AverageMeter('Acc@5', ':6.2f')
+        progress = self.ProgressMeter(len(test_gen), batch_time, losses, top1, top5, prefix='Test: ')
+
+        # Switch to evaluate mode
+        self.model.eval()
+        self.model.set_train(False)
+        self.model.reset_pred_stats()
+        self.model.add_stats_gather(stats)
+
+
+        if reset_output:
+            self.stats.clear_tbl('main')
+            self.stats.clear_tbl('mispred_values_hist')
+            self.stats.clear_tbl('mask_values_hist')
+            self.stats.clear_tbl('err_to_th')
+
+        with torch.no_grad():
+            end = time.time()
+            for i, (input, target) in enumerate(test_gen):
+                input = input.cuda(self.device, non_blocking=True)
+                target = target.cuda(self.device, non_blocking=True)
+
+                # Compute output
+                output = self.parallel_model(input)
+                loss = self.criterion(output, target)
+
+                # Measure accuracy and record loss
+                acc1, acc5 = self._accuracy(output, target, topk=(1, 5))
+                losses.update(loss.item(), input.size(0))
+                top1.update(acc1[0], input.size(0))
+                top5.update(acc5[0], input.size(0))
+
+                # Measure elapsed time
+                batch_time.update(time.time() - end)
+                end = time.time()
+
+                # Print to screen
+                if i % 100 == 0:
+                    progress.print(i)
+
+            # TODO: this should also be done with the ProgressMeter
+            cfg.LOG.write(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'.format(top1=top1, top5=top5))
+
+        #  print("{} {} ".format(str(top1).split(" ")[-1].replace(")", ""), type(str(top1).split(" ")[-1])))
+        #  print("{} {} ".format(str(top5).split(" ")[-1].replace(")", ""), type(str(top1).split(" ")[-1])))
+        processed_top1 = str(top1).split(" ")[-1].replace(")", "")
+        processed_top5 = str(top5).split(" ")[-1].replace(")", "")
+        with open(filename, "a") as csv_output:
+            csv_output.write("{},{},{:.2f},{:.2f}\n".format(mask, threshold, float(processed_top1), float(processed_top5)))
+
+        # Gather and print statistics
+        if stats:
+            self._print_stats(stats, reset_output)
+
+        return top1.avg
+
+
     def train(self, train_gen, test_gen, epochs, lr=0.0001, lr_plan=None, momentum=0.9, wd=5e-4, stats=None):
         self.optimizer = torch.optim.SGD(self.model.parameters(), lr=lr, momentum=momentum, weight_decay=wd)
         self.lr_plan = lr_plan
