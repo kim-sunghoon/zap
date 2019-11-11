@@ -29,14 +29,14 @@ def init_gen(filename, planes):
 
         f.write("\n")
         for i in range(0, planes):
-            f.write("            nn.init.kaiming_normal_(self.weight2_{:3d}, mode=\'fan_out\', nonlinearity=\'relu\')\n".format(i+1))
+            f.write("            nn.init.kaiming_normal_(self.weight2_{}, mode=\'fan_out\', nonlinearity=\'relu\')\n".format(i+1))
 
 
 
 def forward_gen(filename, planes):
     with open(filename, 'a') as f:
         f.write("    ############## forward ############\n")
-        f.write("        elif (cfg.filter_mode=\'x\' and self.planes={}):\n".format(planes))
+        f.write("        elif (cfg.filter_mode==\'x\' and self.planes=={}):\n".format(planes))
         f.write("            out1 = None\n")
         f.write("            out2 = None\n")
         f.write("\n")
@@ -49,30 +49,43 @@ def forward_gen(filename, planes):
         for i in range(0, planes):
             f.write("            out1_{} = F.conv2d(x[:, {}:{},:,:], self.weight1_{}, stride=1, padding=1, groups=1)\n".format(i+1, i, i+1, i+1))
         f.write("\n")
-        f.write("            out1 = torch.cat[")
+        f.write("            out1 = torch.cat([")
         for i in range(0, planes):
-            if i+1 is not planes:
-                f.write("out1_{}, ".format(i+1))
-            #  elif i+1 % 10 == 0:
-            #      f.write("\n")
+            if i+1 != planes:
+                if i < 9:
+                    f.write("out1_{}, ".format(i+1))
+                elif ((i+1) % 10) == 0:
+                    print("(i+1) % 10 == 0")
+                    f.write("out1_{},".format(i+1))
+                    f.write("\n                    ")
+                else:
+                    f.write("out1_{}, ".format(i+1))
             else:
                 f.write("out1_{}], dim=1)\n ".format(i+1))
 
         f.write("\n")
         f.write("            out1 = self.bn1(out1)\n")
         f.write("            out1 = F.relu(out1)\n")
+
+
         for i in range(0, planes):
             f.write("            out2_{} = F.conv2d(out1[:, {}:{},:,:], self.weight2_{}, stride=1, padding=1, groups=1)\n".format(i+1, i, i+1, i+1))
 
         f.write("\n")
-        f.write("            out2 = torch.cat[")
+        f.write("            out2 = torch.cat([")
         for i in range(0, planes):
-            if i+1 is not planes:
-                f.write("out2_{}, ".format(i+1))
-            #  elif i+1 % 10 == 0:
-            #      f.write("\n")
+            if i+1 != planes:
+                if i < 9:
+                    f.write("out2_{}, ".format(i+1))
+                elif ((i+1) % 10) == 0:
+                    print("(i+1) % 10 == 0")
+                    f.write("out2_{},".format(i+1))
+                    f.write("\n                    ")
+                else:
+                    f.write("out2_{}, ".format(i+1))
             else:
-                f.write("out2_{}], dim=1)\n ".format(i+1))
+                f.write("out2_{}], dim=1)\n".format(i+1))
+
         f.write("            x_pred_mask = self.bn2(out2)\n")
 
 if __name__ == "__main__":
