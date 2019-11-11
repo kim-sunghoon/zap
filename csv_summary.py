@@ -21,15 +21,15 @@ def read_csv(csv_name):
 if __name__ == "__main__":
     args = parse_opts()
 
-    target_list = os.path.join("filter*", "{}*.csv".format(args.arch))
-    print(target_list)
-    csv_lists_ = glob(target_list)
-    #  print(csv_lists_)
-    for csv_list in csv_lists_:
-        if "summary_csv" in csv_list:
-            del csv_lists_[csv_lists_.index(csv_list)]
-    #  print(csv_lists_)
+    csv_lists_ = glob(os.path.join("filter*", "{}*.csv".format(args.arch)))
+    # add filter mode 0's csv files
+    csv_lists_.extend(glob(os.path.join("data", "{}*.csv".format(args.arch))))
 
+    #  for csv_list in csv_lists_:
+    #      if "summary_csv" in csv_list:
+    #          del csv_lists_[csv_lists_.index(csv_list)]
+
+    #### super easy sorting in python, window style sorting
     csv_lists_ = natsort.natsorted(csv_lists_, reverse=False)
     print(csv_lists_)
 
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     headers = read_lists[0].columns.tolist()
     print(headers)
 
-    read_lists[0].to_csv("summary_csv/summary_{}.csv".format(args.arch))
+    read_lists[0].to_csv("summary_csv/summary_{}.csv".format(args.arch), index=False)
 
 
 
