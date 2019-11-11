@@ -3,12 +3,28 @@ from glob import glob
 import numpy
 import pandas as pd
 import natsort
+import argparse
+
+model_names = ['alexnet-cifar100', 'alexnet-imagenet',
+               'vgg16-imagenet',
+               'resnet18-imagenet']
+def parse_opts():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-a', '--arch', metavar='ARCH', choices=model_names,
+                    default = 'alexnet-cifar100',
+                    help='model architectures and datasets:\n ' + ' | '.join(model_names))
+    return parser.parse_args()
 
 def read_csv(csv_name):
     return pd.read_csv(csv_name)
 
 if __name__ == "__main__":
-    csv_lists_ = sorted(glob("./*/*.csv"))
+    args = parse_opts()
+
+    target_list = os.path.join("filter*", "{}*.csv".format(args.arch))
+    print(target_list)
+    csv_lists_ = glob(target_list)
+    #  print(csv_lists_)
     for csv_list in csv_lists_:
         if "summary_csv" in csv_list:
             del csv_lists_[csv_lists_.index(csv_list)]
@@ -27,7 +43,7 @@ if __name__ == "__main__":
     headers = read_lists[0].columns.tolist()
     print(headers)
 
-    read_lists[0].to_csv("summary_csv/summary.csv")
+    read_lists[0].to_csv("summary_csv/summary_{}.csv".format(args.arch))
 
 
 
