@@ -18,8 +18,9 @@ Filter mode for zap
 :8 --> 8*K*K
 :16 --> 16*K*K
 :32 --> 32*K*K
+:x --> N*K*K filters with our weight generation method
 """
-filter_mode = 32
+filter_mode = 'x'
 print("filter mode: {}".format(filter_mode))
 
 

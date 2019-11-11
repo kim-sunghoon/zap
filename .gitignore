@@ -12,3 +12,5 @@ filter_mode*/
 
 *.csv
 *.png
+test*/
+test*
